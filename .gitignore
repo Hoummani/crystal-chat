@@ -1,0 +1,5 @@
+/node_modules
+/chat-ui/node_modules
+.env
+/chat-ui/build
+/chat-ui/.env
