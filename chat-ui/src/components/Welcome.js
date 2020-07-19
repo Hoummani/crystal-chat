@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Navbar } from './core/Navbar';
+import { WelcomeImage } from './WelcomeImage';
 
 export function Welcome() {
 
@@ -11,8 +12,11 @@ export function Welcome() {
       <br />
       <br />
       <div className="grid md:grid-cols-2 p-5 overflow-hidden">
-        <div>
-          <img src="/img/undraw_Updated_re_u4yh.svg" alt="welcome page" />
+          {/**
+           * <img src="/img/undraw_Updated_re_u4yh.svg" alt="welcome page" />
+           */}
+        <div className="w-full">
+          <WelcomeImage />
         </div>
         <div className="p-5">
           <h2 className="text-center text-3xl leading-9 font-extrabold text-gray-800">
@@ -27,7 +31,12 @@ export function Welcome() {
               Also provide a way to schedule your agenda
             </p>
           </div>
-          <div className="buttons mt-10 flex justify-center">
+         {/**
+          *  <div className="flex justify-center mt-10">
+            <Loader />
+          </div>
+          */}
+          <div className="buttons flex justify-center mt-6">
             <button 
               type="button" 
               className="group py-1 px-4 mr-4 border border-transparent 
@@ -35,6 +44,9 @@ export function Welcome() {
                 bg-teal-500 hover:bg-teal-400 focus:outline-none 
                 focus:border-teal-400 focus:shadow-outline-teal 
                 active:bg-teal-400 active:outline-none transition duration-150 ease-in-out" 
+              onClick={() => {
+                history.push('/register');
+              }}
             >
               Register
             </button>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export function Navbar() {
   return (
@@ -12,7 +13,9 @@ export function Navbar() {
               className="fab fa-rocketchat font-semibold text-2xl tracking-tight" 
               style={{marginRight: '5px'}} 
             />
-            <span className="font-semibold text-2xl tracking-tight">Crystal Chat</span>
+            <span className="font-semibold text-2xl tracking-tight">
+              <Link to="/">Crystal Chat</Link>
+            </span>
           </div>
         </nav>
     </div>
