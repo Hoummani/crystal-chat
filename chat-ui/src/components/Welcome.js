@@ -1,7 +1,10 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Navbar } from './core/Navbar';
 
 export function Welcome() {
+
+  const history = useHistory();
   return (
     <div className="welcome">
       <Navbar />
@@ -42,6 +45,9 @@ export function Welcome() {
                 bg-white-500 hover:bg-gray-100 focus:outline-none 
                 focus:border-gray-100 focus:shadow-outline-white 
                 active:bg-gray-100 active:outline-none transition duration-150 ease-in-out" 
+              onClick={() => {
+                history.push('/login');
+              }}
             >
               Sign In
             </button>
