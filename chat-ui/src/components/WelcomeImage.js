@@ -17,7 +17,7 @@ const rightPathVariant = {
 }
 const leftPathVariant = {
   hidden: {
-    opacity: 0.5
+    opacity: 0.2
   },
   visible: {
     opacity: 1,
@@ -85,7 +85,7 @@ export function WelcomeImage() {
       />
       <motion.g 
         id="rightChatText"
-        initial={{ opacity: 0 }}
+        initial={{ opacity: 0.2 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.5, yoyo: Infinity, ease: 'easeOut' }}
       >
@@ -142,7 +142,7 @@ export function WelcomeImage() {
       />
       <motion.g 
         id="leftChatText"
-        initial={{ opacity: 0 }}
+        initial={{ opacity: 0.2 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.75, yoyo: Infinity, ease: 'easeOut' }}
       >

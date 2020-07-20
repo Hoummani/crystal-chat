@@ -1,8 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Navbar } from './core/Navbar';
+import { useForm } from 'react-hook-form';
 
 export function RegisterPage() {
+  // hook form
+  const { register, handleSubmit, errors, watch } = useForm();
+
+  // functions
+  const onSubmit = (data) => {
+    console.log(data);
+  }
   return (
     <div className="register-page">
       <Navbar />
@@ -19,7 +27,7 @@ export function RegisterPage() {
           Its quick access<br/>
         </p>
         <br />
-        <form className="">
+        <form className="" onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-2 gap-1">
             <div className="flex justify-end">
               <div className="lg:w-1/3 md:w-2/3 w-full">
@@ -33,6 +41,13 @@ export function RegisterPage() {
                   name="firstName" 
                   id="firstName"
                   type="text" 
+                  ref={register({
+                    required: "First Name is required",
+                    minLength: {
+                      value: 3,
+                      message: 'First Name must be great than 3 characters'
+                    }
+                  })}
                   placeholder="John" 
                   className="bg-gray-200 appearance-none border-2 border-gray-200 
                     rounded w-full py-2 px-4 text-gray-700 leading-tight 
@@ -42,7 +57,7 @@ export function RegisterPage() {
                 <span 
                   className="block text-red-400 text-xs italic"
                 >
-                  FirstName is required
+                  {errors.firstName && <>{errors.firstName.message}</>}
                 </span>
               </div>
             </div>
@@ -58,6 +73,13 @@ export function RegisterPage() {
                   name="lastName" 
                   id="lastName"
                   type="text" 
+                  ref={register({
+                    required: "Last Name is required",
+                    minLength: {
+                      value: 3,
+                      message: 'First Name must be great than 3 characters'
+                    }
+                  })}
                   placeholder="Doe" 
                   className="bg-gray-200 appearance-none border-2 border-gray-200 
                     rounded w-full py-2 px-4 text-gray-700 leading-tight 
@@ -67,7 +89,7 @@ export function RegisterPage() {
                 <span 
                   className="block text-red-400 text-xs italic"
                 >
-                  Last Name is required
+                  {errors.lastName && <>{errors.lastName.message}</>}
                 </span>
               </div>
             </div>
@@ -84,6 +106,9 @@ export function RegisterPage() {
                 name="email" 
                 id="email"
                 type="email" 
+                ref={register({
+                  required: "Email Address is required"
+                })}
                 placeholder="test.js@gmail.com" 
                 className="bg-gray-200 appearance-none border-2 border-gray-200 
                   rounded w-full py-2 px-4 text-gray-700 leading-tight 
@@ -93,7 +118,7 @@ export function RegisterPage() {
               <span 
                 className="block text-red-400 text-xs italic"
               >
-                Email address is required
+                {errors.email && <>{errors.email.message}</>}
               </span>
             </div>
           </div>
@@ -109,6 +134,13 @@ export function RegisterPage() {
                   aria-label="Password" 
                   name="password" 
                   id="password"
+                  ref={register({
+                    required: "Password is required",
+                    minLength: {
+                      value: 8,
+                      message: 'First Name must be great than 8 characters'
+                    }
+                  })}
                   type="password" 
                   placeholder="******" 
                   className="bg-gray-200 appearance-none border-2 border-gray-200 
@@ -119,7 +151,7 @@ export function RegisterPage() {
                 <span 
                   className="block text-red-400 text-xs italic"
                 >
-                  Password is required
+                  {errors.password && <>{errors.password.message}</>}
                 </span>
               </div>
             </div>
@@ -135,6 +167,15 @@ export function RegisterPage() {
                   name="confirmPassword" 
                   id="confirmPassword"
                   type="password" 
+                  ref={register({
+                    required: "Confirm Password is required",
+                    minLength: {
+                      value: 8,
+                      message: 'First Name must be great than 8 characters'
+                    },
+                    validate: (value) => value === watch('password') || 
+                    "Confirm Password must be the same as Password"
+                  })}
                   placeholder="******" 
                   className="bg-gray-200 appearance-none border-2 border-gray-200 
                     rounded w-full py-2 px-4 text-gray-700 leading-tight 
@@ -144,7 +185,7 @@ export function RegisterPage() {
                 <span 
                   className="block text-red-400 text-xs italic"
                 >
-                  Confirm Password is required
+                  {errors.confirmPassword && <>{errors.confirmPassword.message}</>}
                 </span>
               </div>
             </div>

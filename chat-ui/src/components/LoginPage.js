@@ -1,8 +1,17 @@
 import React from 'react';
+import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { Navbar } from './core/Navbar';
 
 export function LoginPage() {
+
+  // hook form
+  const { register, handleSubmit, errors } = useForm();
+
+  // functions
+  const onSubmit = (data) => {
+    console.log(data);
+  }
   return (
     <div className="login-page">
       <Navbar />
@@ -20,7 +29,7 @@ export function LoginPage() {
           Its simple and easy<br/>
         </p>
         <br />
-        <form className="">
+        <form className="" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex justify-center">
             <div className="lg:w-1/3 md:w-2/3 w-full">
               <label 
@@ -33,6 +42,9 @@ export function LoginPage() {
                 name="email" 
                 id="email"
                 type="email" 
+                ref={register({
+                  required: "Email Address is required"
+                })}
                 placeholder="test.js@gmail.com" 
                 className="bg-gray-200 appearance-none border-2 border-gray-200 
                   rounded w-full py-2 px-4 text-gray-700 leading-tight 
@@ -42,7 +54,7 @@ export function LoginPage() {
               <span 
                 className="block text-red-400 text-xs italic"
               >
-                Email address is required
+                {errors.email && <>{errors.email.message}</>}
               </span>
             </div>
           </div>
@@ -58,6 +70,13 @@ export function LoginPage() {
                 name="password" 
                 id="password"
                 type="password" 
+                ref={register({
+                  required: "Password is required",
+                  minLength: {
+                    value: 8,
+                    message: 'First Name must be great than 8 characters'
+                  }
+                })}
                 placeholder="******" 
                 className="bg-gray-200 appearance-none border-2 border-gray-200 
                   rounded w-full py-2 px-4 text-gray-700 leading-tight 
@@ -67,7 +86,7 @@ export function LoginPage() {
               <span 
                 className="block text-red-400 text-xs italic"
               >
-                Password is required
+                {errors.password && <>{errors.password.message}</>}
               </span>
             </div>
           </div>
