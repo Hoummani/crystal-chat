@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { AccountDropDown } from '../core/AccountDropDown';
 
 export function DashNavBar() {
   return (
@@ -18,25 +19,35 @@ export function DashNavBar() {
         </span>
       </div>
       <div className="flex justify-end items-center">
-        <a href="#" className="text-white mr-2">
+        <a href="#" className="text-white mr-8 relative">
           <span>
             <i 
               className="fab fa-facebook-messenger font-semibold text-2xl tracking-tight" 
             />
           </span>
+          <span 
+            className="bg-red-500 text-xs text-white rounded-full px-1 font-bold absolute top-0"
+          >
+            3
+          </span>
         </a>
-        <div  
-          className="text-sm w-10 h-10 leading-none 
-            rounded-full bg-local bg-cover hidden md:inline-block"
-          style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
-        />
-        <a href="#" className="text-white ml-2">
+        <div className="relative">
+          <div  
+            className="text-sm w-10 h-10 leading-none 
+              rounded-full bg-local bg-cover hidden md:inline-block"
+            style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
+          />
+        </div>
+        {/**
+         * <a href="#" className="text-white ml-2">
           <span>
             <i 
               className="far fa-caret-square-down font-semibold text-xl tracking-tight" 
             />
           </span>
         </a>
+         */}
+        <AccountDropDown />
       </div>
     </nav>
   )
