@@ -11,7 +11,42 @@ require('dotenv').config();
 // apollo server
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers,
+  context: async({ req, connection }) => {
+    // Get the user token from the headers.
+    if (connection) {
+      return connection.context;
+    }
+    if (req && req.headers) {
+      const token = req.headers.authorization;
+      const authToken = token.split(' ')[1];
+      let decoded;
+      if (authToken) {
+        decoded = await jwt.verify(authToken, process.env.JWT_KEY);
+        if (decoded) {
+          return { userId: decoded.userId, isLoggedIn: true };
+        }
+      }
+      return { userId: null, isLoggedIn: false };
+    }
+  },
+  subscriptions: {
+    onConnect: async (connectionParams, webSocket, context) => {
+      if (connectionParams && connectionParams.Authorization) {
+        const token = connectionParams.Authorization || '';
+        const authToken = token.split(' ')[1];
+        let decoded;
+        if (authToken && authToken !== '') {
+          decoded = await jwt.verify(authToken, process.env.JWT_KEY);
+          if (decoded) {
+            return { userId: decoded.userId, isLoggedIn: true };
+          }
+        }
+      }
+      return { userId: null, isLoggedIn: false };
+    }
+  },
+  introspection: true
 });
 
 // The `listen` method launches a web server.
