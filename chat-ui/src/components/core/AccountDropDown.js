@@ -7,7 +7,7 @@ export function AccountDropDown() {
   const [isDroped, setIsDroped] = useState(false);
   return (
     <div 
-      className="relative"
+      className="relative z-50"
       onMouseEnter={() => {
         setIsDroped(true);
       }}

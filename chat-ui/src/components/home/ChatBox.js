@@ -1,21 +1,288 @@
 import React from 'react';
+import { ChatBoxForm } from './ChatBoxForm';
 
 export function ChatBox() {
   return (
+    <>
     <div 
-      className="md:col-span-2 p-6 bg-local"
-      style={{backgroundImage: "url('/img/bg_oc_things_grey.jpeg')"}}
+      className="md:col-span-2 p-6 bg-local h-full md:overflow-y-auto"
+      style={{backgroundImage: "url('/img/bg_oc_things_grey.jpeg')", height: "85vh"}}
     >
-      <ul>
-        <li>
-          <strong>Ahmed Amine</strong>
-          <span>Hi there i'am here</span>
-        </li>
-        <li>
-          <strong>Abderrazak Lahmidi</strong>
-          <span>It's too late baby</span>
-        </li>
-      </ul>
+      <div 
+        className="chat-content"
+      >
+        <ul className="friend-chat my-6">
+          <li>
+            <div className="flex justify-start">
+              <div className="relative mr-4">
+                <div  
+                  className="text-sm w-10 h-10 leading-none 
+                    rounded-full bg-local bg-cover"
+                  style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
+                />
+              </div>
+              <div 
+                className="bg-gray-200 text-sm border-1 
+                  border-gray-700 rounded-lg w-full md:w-64 px-2 py-2"
+              >
+                Hi there I'am lokking for a simple chart of my life
+              </div>
+            </div>
+          </li>
+        </ul>
+        <ul className="my-chat my-6">
+          <li>
+            <div className="flex justify-end">
+              <div 
+                className="bg-teal-500 text-white text-sm border-1 
+                  border-gray-700 rounded-lg w-full md:w-64 px-2 py-2"
+              >
+                Hi there I'am lokking for a simple hhhhhhhhhhhhhhhhhhh chart of my life
+              </div>
+              <div className="relative mr-4">
+                <div  
+                  className="text-sm ml-2 w-10 h-10 leading-none 
+                    rounded-full bg-local bg-cover"
+                  style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
+                />
+              </div>
+            </div>
+          </li>
+        </ul>
+        <ul className="friend-chat my-6">
+          <li>
+            <div className="flex justify-start">
+              <div className="relative mr-4">
+                <div  
+                  className="text-sm w-10 h-10 leading-none 
+                    rounded-full bg-local bg-cover"
+                  style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
+                />
+              </div>
+              <div 
+                className="bg-gray-200 text-sm border-1 
+                  border-gray-700 rounded-lg w-full md:w-64 px-2 py-2"
+              >
+                Hi there I'am lokking for a simple chart of my life
+              </div>
+            </div>
+          </li>
+        </ul>
+        <ul className="my-chat my-6">
+          <li>
+            <div className="flex justify-end">
+              <div 
+                className="bg-teal-500 text-white text-sm border-1 
+                  border-gray-700 rounded-lg w-full md:w-64 px-2 py-2"
+              >
+                Hi there I'am lokking for a simple hhhhhhhhhhhhhhhhhhh chart of my life
+              </div>
+              <div className="relative mr-4">
+                <div  
+                  className="text-sm ml-2 w-10 h-10 leading-none 
+                    rounded-full bg-local bg-cover"
+                  style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
+                />
+              </div>
+            </div>
+          </li>
+        </ul>
+        <ul className="friend-chat my-6">
+          <li>
+            <div className="flex justify-start">
+              <div className="relative mr-4">
+                <div  
+                  className="text-sm w-10 h-10 leading-none 
+                    rounded-full bg-local bg-cover"
+                  style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
+                />
+              </div>
+              <div 
+                className="bg-gray-200 text-sm border-1 
+                  border-gray-700 rounded-lg w-full md:w-64 px-2 py-2"
+              >
+                Hi there I'am lokking for a simple chart of my life
+              </div>
+            </div>
+          </li>
+        </ul>
+        <ul className="my-chat my-6">
+          <li>
+            <div className="flex justify-end">
+              <div 
+                className="bg-teal-500 text-white text-sm border-1 
+                  border-gray-700 rounded-lg w-full md:w-64 px-2 py-2"
+              >
+                Hi there I'am lokking for a simple hhhhhhhhhhhhhhhhhhh chart of my life
+              </div>
+              <div className="relative mr-4">
+                <div  
+                  className="text-sm ml-2 w-10 h-10 leading-none 
+                    rounded-full bg-local bg-cover"
+                  style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
+                />
+              </div>
+            </div>
+          </li>
+        </ul>
+        <ul className="friend-chat my-6">
+          <li>
+            <div className="flex justify-start">
+              <div className="relative mr-4">
+                <div  
+                  className="text-sm w-10 h-10 leading-none 
+                    rounded-full bg-local bg-cover"
+                  style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
+                />
+              </div>
+              <div 
+                className="bg-gray-200 text-sm border-1 
+                  border-gray-700 rounded-lg w-full md:w-64 px-2 py-2"
+              >
+                Hi there I'am lokking for a simple chart of my life
+              </div>
+            </div>
+          </li>
+        </ul>
+        <ul className="my-chat my-6">
+          <li>
+            <div className="flex justify-end">
+              <div 
+                className="bg-teal-500 text-white text-sm border-1 
+                  border-gray-700 rounded-lg w-full md:w-64 px-2 py-2"
+              >
+                Hi there I'am lokking for a simple hhhhhhhhhhhhhhhhhhh chart of my life
+              </div>
+              <div className="relative mr-4">
+                <div  
+                  className="text-sm ml-2 w-10 h-10 leading-none 
+                    rounded-full bg-local bg-cover"
+                  style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
+                />
+              </div>
+            </div>
+          </li>
+        </ul>
+        <ul className="friend-chat my-6">
+          <li>
+            <div className="flex justify-start">
+              <div className="relative mr-4">
+                <div  
+                  className="text-sm w-10 h-10 leading-none 
+                    rounded-full bg-local bg-cover"
+                  style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
+                />
+              </div>
+              <div 
+                className="bg-gray-200 text-sm border-1 
+                  border-gray-700 rounded-lg w-full md:w-64 px-2 py-2"
+              >
+                Hi there I'am lokking for a simple chart of my life
+              </div>
+            </div>
+          </li>
+        </ul>
+        <ul className="my-chat my-6">
+          <li>
+            <div className="flex justify-end">
+              <div 
+                className="bg-teal-500 text-white text-sm border-1 
+                  border-gray-700 rounded-lg w-full md:w-64 px-2 py-2"
+              >
+                Hi there I'am lokking for a simple hhhhhhhhhhhhhhhhhhh chart of my life
+              </div>
+              <div className="relative mr-4">
+                <div  
+                  className="text-sm ml-2 w-10 h-10 leading-none 
+                    rounded-full bg-local bg-cover"
+                  style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
+                />
+              </div>
+            </div>
+          </li>
+        </ul>
+        <ul className="friend-chat my-6">
+          <li>
+            <div className="flex justify-start">
+              <div className="relative mr-4">
+                <div  
+                  className="text-sm w-10 h-10 leading-none 
+                    rounded-full bg-local bg-cover"
+                  style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
+                />
+              </div>
+              <div 
+                className="bg-gray-200 text-sm border-1 
+                  border-gray-700 rounded-lg w-full md:w-64 px-2 py-2"
+              >
+                Hi there I'am lokking for a simple chart of my life
+              </div>
+            </div>
+          </li>
+        </ul>
+        <ul className="my-chat my-6">
+          <li>
+            <div className="flex justify-end">
+              <div 
+                className="bg-teal-500 text-white text-sm border-1 
+                  border-gray-700 rounded-lg w-full md:w-64 px-2 py-2"
+              >
+                Hi there I'am lokking for a simple hhhhhhhhhhhhhhhhhhh chart of my life
+              </div>
+              <div className="relative mr-4">
+                <div  
+                  className="text-sm ml-2 w-10 h-10 leading-none 
+                    rounded-full bg-local bg-cover"
+                  style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
+                />
+              </div>
+            </div>
+          </li>
+        </ul>
+        <ul className="friend-chat my-6">
+          <li>
+            <div className="flex justify-start">
+              <div className="relative mr-4">
+                <div  
+                  className="text-sm w-10 h-10 leading-none 
+                    rounded-full bg-local bg-cover"
+                  style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
+                />
+              </div>
+              <div 
+                className="bg-gray-200 text-sm border-1 
+                  border-gray-700 rounded-lg w-full md:w-64 px-2 py-2"
+              >
+                Hi there I'am lokking for a simple chart of my life
+              </div>
+            </div>
+          </li>
+        </ul>
+        <ul className="my-chat my-6">
+          <li>
+            <div className="flex justify-end">
+              <div 
+                className="bg-teal-500 text-white text-sm border-1 
+                  border-gray-700 rounded-lg w-full md:w-64 px-2 py-2"
+              >
+                Hi there I'am lokking for a simple hhhhhhhhhhhhhhhhhhh chart of my life
+              </div>
+              <div className="relative mr-4">
+                <div  
+                  className="text-sm ml-2 w-10 h-10 leading-none 
+                    rounded-full bg-local bg-cover"
+                  style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
+                />
+              </div>
+            </div>
+          </li>
+        </ul>
+        <br />
+        <br />
+      </div>
+      
+      <ChatBoxForm />
     </div>
+    </>
   )
 }
