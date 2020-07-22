@@ -1,16 +1,44 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useMutation } from '@apollo/react-hooks';
 import { Link } from 'react-router-dom';
 import { Navbar } from './core/Navbar';
 import { useForm } from 'react-hook-form';
+import { REGISTER } from '../apollo-client/authGql';
+import { Loader } from './core/Loader';
 
 export function RegisterPage() {
   // hook form
   const { register, handleSubmit, errors, watch } = useForm();
+  const history = useHistory();
+  // apollo
+  const [signUp, { data, loading }] = useMutation(REGISTER);
 
   // functions
-  const onSubmit = (data) => {
-    console.log(data);
-  }
+  const onSubmit = async (data) => {
+    if (data) {
+      try {
+        await signUp({
+          variables: {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            password: data.password
+          }
+        })
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  };
+
+  // effects
+  useEffect(() => {
+    if (data && data.register) {
+      history.push('/login');
+    }
+  }, [data]);
   return (
     <div className="register-page">
       <Navbar />
@@ -190,7 +218,14 @@ export function RegisterPage() {
               </div>
             </div>
           </div>
-          <div className="mt-6 flex justify-center">
+          <>
+            {loading ? (
+              <div className="mt-6 flex justify-center">
+                <Loader />
+              </div>
+            ) : null}
+          </>
+          <div className="mt-4 flex justify-center">
             <button 
               type="submit" 
               className="group w-full lg:w-1/3 md:w-2/3 

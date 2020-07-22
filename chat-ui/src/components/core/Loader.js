@@ -5,8 +5,8 @@ import { motion } from 'framer-motion';
 // variant
 const loaderVariant = {
   animationOne: {
-    x: [-50, 50],
-    y:[0, -30],
+    x: [0, 0],
+    y:[-20, 0],
     transition: {
       x: {
         yoyo: Infinity,
@@ -14,7 +14,7 @@ const loaderVariant = {
       },
       y: {
         yoyo: Infinity,
-        duration: 0.25,
+        duration: 0.10,
         ease: "easeOut"
       }
     }

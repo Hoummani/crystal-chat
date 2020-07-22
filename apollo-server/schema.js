@@ -1,5 +1,6 @@
 const { gql } = require('apollo-server');
 const { testsTypeDefs } = require('./resolvers/testResolver');
+const { userTypeDefs } = require('./resolvers/userResolver');
 
 const typeDefs = gql`
 
@@ -17,6 +18,7 @@ const typeDefs = gql`
     _empty: String
   }
   ${testsTypeDefs}
+  ${userTypeDefs}
 `;
 
 exports.typeDefs = typeDefs;

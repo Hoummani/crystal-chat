@@ -5,7 +5,7 @@ export function ChatBox() {
   return (
     <>
     <div 
-      className="md:col-span-2 p-6 bg-local h-full md:overflow-y-auto"
+      className="md:col-span-2 p-6 bg-fixed h-full md:overflow-y-auto"
       style={{backgroundImage: "url('/img/bg_oc_things_grey.jpeg')", height: "85vh"}}
     >
       <div 
