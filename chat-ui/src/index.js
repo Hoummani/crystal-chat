@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import App from './App';
 import './assets/main.css';
@@ -84,7 +85,9 @@ client.defaultOptions = {
 
 ReactDOM.render(
   <React.StrictMode>
-    <ApolloProvider client={client}><App /></ApolloProvider>
+    <Router>
+      <ApolloProvider client={client}><App /></ApolloProvider>
+    </Router>
   </React.StrictMode>,
   document.getElementById('root')
 );

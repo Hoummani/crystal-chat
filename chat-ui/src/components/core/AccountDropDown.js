@@ -1,10 +1,35 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useMutation } from '@apollo/react-hooks';
+import { Link } from 'react-router-dom';
+import { LOG_OUT } from '../../apollo-client/authGql';
 
 export function AccountDropDown() {
 
   // states
   const [isDroped, setIsDroped] = useState(false);
+
+  // apollo
+  const [logOut, { data }] = useMutation(LOG_OUT);
+  const history = useHistory();
+  // functions
+  const onLogOut = async () => {
+    try {
+      await logOut();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // effects
+  useEffect(() => {
+    if (data) {
+      localStorage.removeItem("token");
+      history.push("/login");
+    }
+  }, [data]);
   return (
     <div 
       className="relative z-50"
@@ -34,8 +59,8 @@ export function AccountDropDown() {
                 setIsDroped(false);
               }}
             >
-              <a 
-                href="#" 
+              <Link
+                to="/profile" 
                 className="block px-4 py-2 text-gray-700 font-bold text-sm 
                   hover:bg-teal-400 hover:text-white"
               >
@@ -44,23 +69,25 @@ export function AccountDropDown() {
                   style={{marginRight: '4px'}} 
                 />
                 Profile
-              </a>
-              <a 
-                href="#" 
+              </Link>
+              <Link 
+                to="/home" 
                 className="block px-4 py-2 text-gray-700 font-bold text-sm 
                   hover:bg-teal-400 hover:text-white"
               >
                 <i 
-                  className="fas fa-cog text-gray-700 text-sm hover:text-white" 
+                  className="fas fa-tachometer-alt text-gray-700 text-sm hover:text-white" 
                   style={{marginRight: '4px'}} 
                 />
-                Settings
-              </a>
+                Dashboard
+              </Link>
               <hr />
               <a 
-                href="#" 
                 className="block px-4 py-2 text-gray-700 font-bold text-sm 
                   hover:bg-teal-400 hover:text-white"
+                onClick={() => {
+                  onLogOut();
+                }}
               >
                 <i 
                   className="fas fa-sign-out-alt text-gray-700 text-sm hover:text-white" 

@@ -1,9 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AccountDropDown } from '../core/AccountDropDown';
+import { AuthContext } from '../../contexts/AuthContext';
 
 export function DashNavBar() {
+
+  // contexts
+  const { authState } = useContext(AuthContext);
+  const { currentUser } = authState;
   return (
     <nav 
       className="flex items-center justify-between 
@@ -35,18 +40,9 @@ export function DashNavBar() {
           <div  
             className="text-sm w-10 h-10 leading-none 
               rounded-full bg-local bg-cover hidden md:inline-block"
-            style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
+            style={{ backgroundImage: currentUser ? `url(${currentUser.avatar})`: `url('')` }}
           />
         </div>
-        {/**
-         * <a href="#" className="text-white ml-2">
-          <span>
-            <i 
-              className="far fa-caret-square-down font-semibold text-xl tracking-tight" 
-            />
-          </span>
-        </a>
-         */}
         <AccountDropDown />
       </div>
     </nav>

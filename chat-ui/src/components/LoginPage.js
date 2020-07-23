@@ -1,17 +1,50 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useMutation } from '@apollo/react-hooks';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { Navbar } from './core/Navbar';
+import { LOGIN } from '../apollo-client/authGql';
+import { Loader } from './core/Loader';
+import { AuthContext } from '../contexts/AuthContext';
 
 export function LoginPage() {
 
   // hook form
   const { register, handleSubmit, errors } = useForm();
 
+  // contexts
+  const { dispatch } = useContext(AuthContext);
+
+
+  // apollo
+  const [login, { data, loading }] = useMutation(LOGIN);
+  const history = useHistory();
   // functions
-  const onSubmit = (data) => {
-    console.log(data);
-  }
+  const onSubmit = async (data) => {
+    if (data) {
+      try {
+        await login({
+          variables: {
+            email: data.email,
+            password: data.password
+          }
+        })
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  // effects
+  useEffect(() => {
+    if (data && data.login) {
+      dispatch({ type: 'SET_AUTH_DATA', authData: data.login });
+      localStorage.setItem('token', data.login.token);
+      history.push("/home");
+    }
+  }, [data]);
   return (
     <div className="login-page">
       <Navbar />
@@ -74,7 +107,7 @@ export function LoginPage() {
                   required: "Password is required",
                   minLength: {
                     value: 8,
-                    message: 'First Name must be great than 8 characters'
+                    message: 'Password must be great than 8 characters'
                   }
                 })}
                 placeholder="******" 
@@ -90,7 +123,14 @@ export function LoginPage() {
               </span>
             </div>
           </div>
-          <div className="mt-6 flex justify-center">
+          <>
+            {loading ? (
+              <div className="mt-6 flex justify-center">
+                <Loader />
+              </div>
+            ) : null}
+          </>
+          <div className="mt-4 flex justify-center">
             <button 
               type="submit" 
               className="group w-full lg:w-1/3 md:w-2/3 
