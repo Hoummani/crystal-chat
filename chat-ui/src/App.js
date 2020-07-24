@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import { useLazyQuery } from '@apollo/react-hooks';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { Welcome } from './components/Welcome';
 import { LoginPage } from './components/LoginPage';
 import { RegisterPage } from './components/RegisterPage';
@@ -15,7 +15,6 @@ import { Profile } from './components/home/Profile';
 function App() {
   //token
   let token = localStorage.getItem("token");
-  const history = useHistory();
   // apollo
   const [checkTokenIsValid, { error }] = useLazyQuery(CHECK_TOKEN_IS_VALID);
 
@@ -26,7 +25,6 @@ function App() {
         await checkTokenIsValid();
       } catch (err) {
         localStorage.removeItem("token");
-        history.push("/login")
       }
     };
     loadTokenValidation();
@@ -34,7 +32,6 @@ function App() {
   useEffect(() => {
     if (error) {
       localStorage.removeItem("token");
-      history.push("/login");
     }
   }, [error]);
   return (

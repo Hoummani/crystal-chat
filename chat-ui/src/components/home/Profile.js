@@ -5,6 +5,7 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import { DashNavBar } from './DashNavBar';
 import { AuthContext } from '../../contexts/AuthContext';
 import { LOAD_USER } from '../../apollo-client/authGql';
+import { UploadAvatar } from './UploadAvatar';
 
 export function Profile() {
 
@@ -44,7 +45,7 @@ export function Profile() {
             {currentUser ? (
               <div className="flex">
                 <img 
-                  src={currentUser.avatar} 
+                  src={ `${process.env.REACT_APP_FILES_STORE}${currentUser.avatar}`} 
                   className="object-cover h-64 w-64"
                   alt="user_avatar" 
                 />
@@ -61,16 +62,7 @@ export function Profile() {
                     <span className="text-md text-gray-700 font-bold mr-2">Email :</span>
                     <span className="text-md text-gray-700">{currentUser.email}</span>
                   </p>
-                  <p className="pt-6">
-                    <input 
-                      type="file"
-                      className="bg-teal-500 w-full text-sm text-white 
-                        py-1 focus:outline-none hover:bg-teal-400 border border-transparent 
-                        leading-5 font-medium rounded-md active:bg-teal-400 
-                        active:outline-none transition duration-150 ease-in-out" 
-                      name="avatar"
-                    />
-                  </p>
+                  <UploadAvatar />
                 </div>
               </div>
             ) : null}

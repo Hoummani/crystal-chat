@@ -40,7 +40,9 @@ export function DashNavBar() {
           <div  
             className="text-sm w-10 h-10 leading-none 
               rounded-full bg-local bg-cover hidden md:inline-block"
-            style={{ backgroundImage: currentUser ? `url(${currentUser.avatar})`: `url('')` }}
+            style={{ backgroundImage: currentUser ? 
+              `url(${process.env.REACT_APP_FILES_STORE}${currentUser.avatar})`: `url('')` 
+            }}
           />
         </div>
         <AccountDropDown />

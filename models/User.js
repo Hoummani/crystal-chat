@@ -24,7 +24,7 @@ const UserSchema = new Schema({
   avatar: {
     type: String,
     required: false,
-    default: '/img/avatars/default-avatar.png'
+    default: 'uploads/avatars/default/default-avatar.png'
   },
   leaved: {
     type: Boolean,

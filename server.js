@@ -1,16 +1,24 @@
 // const { ApolloServer } = require('apollo-server');
 const { ApolloServer } = require('apollo-server-express');
+const http = require('http');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const express = require('express');
 const { typeDefs } = require('./apollo-server/schema');
 const { resolvers } = require('./apollo-server/resolvers/rootResolver');
+const uploadProfileAvatar = require('./services/uploadProfileAvatar');
 
 // env variables
 require('dotenv').config();
 
 // express staffs
 const app = express();
+app.use(cors());
+
+// static files
+app.use('/uploads', express.static('uploads'));
+app.use('/upload/profileAvatar', uploadProfileAvatar);
 
 
 // apollo server
@@ -55,14 +63,17 @@ const server = new ApolloServer({
 });
 
 server.applyMiddleware({ app });
+const httpServer = http.createServer(app);
+server.installSubscriptionHandlers(httpServer);
 // The `listen` method launches a web server.
 /*
 server.listen().then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
 });
 */
-app.listen({ port: process.env.PORT }, () => {
-  console.log(`🚀  Server is ready at : http://localhost:${process.env.PORT}`);
+httpServer.listen({ port: process.env.PORT }, () => {
+  console.log(`🚀  Server is ready at : http://localhost:${process.env.PORT}${server.graphqlPath}`);
+  console.log(`🚀  Subscriptions ready at ws://localhost:${process.env.PORT}${server.subscriptionsPath}`)
 })
 
 // mongoDB
