@@ -13,6 +13,11 @@ const ContactSchema = new Schema({
     ref: 'User',
     required: true
   },
+  friendShip: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
   chats: [
     {
       type: mongoose.Schema.Types.ObjectId,

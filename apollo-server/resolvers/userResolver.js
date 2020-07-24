@@ -27,7 +27,7 @@ exports.userTypeDefs = gql`
   }
 
   extend type Query {
-    getUsers: [User]
+    getUsers: [User!]!
     loadUser: User!
     checkTokenIsValid: OperationData!
   }
@@ -53,13 +53,15 @@ exports.userTypeDefs = gql`
 const resolvers = {
   Query: {
     getUsers: async () => {
-      try {
-        const users = await User.find();
-        return users.map(item => {
-          return { ...item._doc };
-        })
-      } catch (err) {
-        throw err;
+      if (context.isLoggedIn) {
+        try {
+          const users = await User.find();
+          return users.map(item => {
+            return { ...item._doc };
+          })
+        } catch (err) {
+          throw err;
+        }
       }
     },
     loadUser: async (root, args, context) => {
