@@ -2,7 +2,7 @@ const { User } = require('../../models/User');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { gql } = require('apollo-server');
+const { gql } = require('apollo-server-express');
 
 // type defs
 exports.userTypeDefs = gql`

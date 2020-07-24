@@ -1,11 +1,16 @@
-const { ApolloServer } = require('apollo-server');
+// const { ApolloServer } = require('apollo-server');
+const { ApolloServer } = require('apollo-server-express');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
+const express = require('express');
 const { typeDefs } = require('./apollo-server/schema');
 const { resolvers } = require('./apollo-server/resolvers/rootResolver');
 
 // env variables
 require('dotenv').config();
+
+// express staffs
+const app = express();
 
 
 // apollo server
@@ -17,7 +22,7 @@ const server = new ApolloServer({
     if (connection) {
       return connection.context;
     }
-    if (req && req.headers) {
+    if (req && req.headers && req.headers.authorization) {
       const token = req.headers.authorization;
       const authToken = token.split(' ')[1];
       let decoded;
@@ -49,10 +54,16 @@ const server = new ApolloServer({
   introspection: true
 });
 
+server.applyMiddleware({ app });
 // The `listen` method launches a web server.
+/*
 server.listen().then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
 });
+*/
+app.listen({ port: process.env.PORT }, () => {
+  console.log(`🚀  Server is ready at : http://localhost:${process.env.PORT}`);
+})
 
 // mongoDB
 // connecting to mongodb

@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server');
+const { gql } = require('apollo-server-express');
 const { testsTypeDefs } = require('./resolvers/testResolver');
 const { userTypeDefs } = require('./resolvers/userResolver');
 
