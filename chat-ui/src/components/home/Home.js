@@ -7,6 +7,7 @@ import { MyFriends } from './MyFriends';
 import { ChatBox } from './ChatBox';
 import { AuthContext } from '../../contexts/AuthContext';
 import { LOAD_USER } from '../../apollo-client/authGql';
+import { ChatContextProvider } from '../../contexts/ChatContext';
 
 export function Home() {
 
@@ -38,13 +39,15 @@ export function Home() {
   }, [data, error])
   return (
     <div className="home">
-      <DashNavBar />
-      <div 
-        className="grid md:grid-cols-3" 
-      >
-        <MyFriends />
-        <ChatBox />
-      </div>
+      <ChatContextProvider>
+        <DashNavBar />
+        <div 
+          className="grid md:grid-cols-3" 
+        >
+          <MyFriends />
+          <ChatBox />
+        </div>
+      </ChatContextProvider>
     </div>
   );
 }

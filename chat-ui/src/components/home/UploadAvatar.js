@@ -57,9 +57,9 @@ export function UploadAvatar() {
         <input 
           type="file"
           onChange={handleChange}
-          className="bg-teal-500 w-full text-sm text-white 
-            py-1 focus:outline-none hover:bg-teal-400 border border-transparent 
-            leading-5 font-medium rounded-md active:bg-teal-400 
+          className="bg-gray-300 w-full text-sm text-gray-700 
+            py-1 focus:outline-none hover:bg-gray-400 border border-transparent 
+            leading-5 font-medium rounded-md active:bg-gray-500 
             active:outline-none transition duration-150 ease-in-out" 
           name="avatar"
           accept=".jpeg,.png,.jpg"
@@ -72,6 +72,9 @@ export function UploadAvatar() {
             focus:border-teal-400 focus:shadow-outline-teal 
             active:bg-teal-400 active:outline-none transition duration-150 ease-in-out" 
         >
+          <span className="mr-2">
+            <i className="fas fa-upload" />
+          </span>
           Upload
         </button>
       </form>

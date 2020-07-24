@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { ChatBoxForm } from './ChatBoxForm';
+import { ChatContext } from '../../contexts/ChatContext';
 
 export function ChatBox() {
+
+  // context
+  const { chatState } = useContext(ChatContext);
+  const { currentChat } = chatState;
+
+  // effects
+  useEffect(() => {
+    if (currentChat) {
+      console.log("Current Chat :" + currentChat);
+    }
+  }, [currentChat])
   return (
     <>
     <div 
