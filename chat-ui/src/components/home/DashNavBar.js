@@ -2,6 +2,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AccountDropDown } from '../core/AccountDropDown';
+import { JoinNotif } from '../core/JoinNotif';
 import { AuthContext } from '../../contexts/AuthContext';
 
 export function DashNavBar() {
@@ -24,6 +25,7 @@ export function DashNavBar() {
         </span>
       </div>
       <div className="flex justify-end items-center">
+        <JoinNotif />
         <a href="#" className="text-white mr-8 relative">
           <span>
             <i 

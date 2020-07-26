@@ -22,7 +22,7 @@ exports.contactTypeDefs = gql`
 
   # Mutation
   extend type Mutation {
-    addContact(friendId: ID!): Contact!
+    joinUser(friendId: ID!): Contact!
   }
 
   # Subscription
@@ -47,7 +47,7 @@ const resolvers = {
     }
   },
   Mutation: {
-    addContact: async (root, args, context) => {
+    joinUser: async (root, args, context) => {
       if (context.isLoggedIn) {
         try {
           const contact = new Contact({

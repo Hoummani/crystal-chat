@@ -16,6 +16,7 @@ exports.userTypeDefs = gql`
     avatar: String
     leaved: Boolean
     isOnline: Boolean
+    createdAt: String
   }
   type AuthData {
     userId: ID!
