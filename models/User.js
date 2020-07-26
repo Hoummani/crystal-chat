@@ -34,6 +34,10 @@ const UserSchema = new Schema({
   isOnline:{
     type: Boolean,
     required: false
+  },
+  lastLogIn: {
+    type: Date,
+    required: false
   }
 },{
   timestamps: true

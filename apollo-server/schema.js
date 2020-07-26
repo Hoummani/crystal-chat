@@ -1,6 +1,8 @@
 const { gql } = require('apollo-server-express');
 const { testsTypeDefs } = require('./resolvers/testResolver');
 const { userTypeDefs } = require('./resolvers/userResolver');
+const { contactTypeDefs } = require('./resolvers/contactResolver');
+const { chatTypeDefs } = require('./resolvers/chatResolver');
 
 const typeDefs = gql`
 
@@ -19,6 +21,8 @@ const typeDefs = gql`
   }
   ${testsTypeDefs}
   ${userTypeDefs}
+  ${contactTypeDefs}
+  ${chatTypeDefs}
 `;
 
 exports.typeDefs = typeDefs;

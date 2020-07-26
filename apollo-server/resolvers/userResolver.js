@@ -52,7 +52,7 @@ exports.userTypeDefs = gql`
 
 const resolvers = {
   Query: {
-    getUsers: async () => {
+    getUsers: async (root, args, context) => {
       if (context.isLoggedIn) {
         try {
           const users = await User.find();
@@ -120,7 +120,7 @@ const resolvers = {
         if (!isEqual) {
           throw new Error("Authentication failed !");
         }
-        await User.updateOne({email: args.email}, {$set: {isOnline: true}});
+        await User.updateOne({email: args.email}, {$set: {isOnline: true, lastLogIn: new Date()}});
         const token = await jwt.sign(
           {userId: user._id, email: user.email},
            process.env.JWT_KEY,

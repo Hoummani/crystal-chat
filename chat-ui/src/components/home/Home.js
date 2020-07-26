@@ -3,7 +3,7 @@ import React, { useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { DashNavBar } from './DashNavBar';
-import { MyFriends } from './MyFriends';
+import { MyContacts } from './MyContacts';
 import { ChatBox } from './ChatBox';
 import { AuthContext } from '../../contexts/AuthContext';
 import { LOAD_USER } from '../../apollo-client/authGql';
@@ -44,7 +44,7 @@ export function Home() {
         <div 
           className="grid md:grid-cols-3" 
         >
-          <MyFriends />
+          <MyContacts />
           <ChatBox />
         </div>
       </ChatContextProvider>
