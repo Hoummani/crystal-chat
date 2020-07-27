@@ -4,7 +4,7 @@ import Moment from 'react-moment';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { GET_USERS, JOIN_USER } from '../../apollo-client/chatGql';
 import { AuthContext } from '../../contexts/AuthContext';
-//import { ChatContext } from '../../contexts/ChatContext';
+import { ChatContext } from '../../contexts/ChatContext';
 import { Loader } from '../core/Loader';
 import './modal_style.css';
 
@@ -17,8 +17,8 @@ export function InviteContactModal({ setOpenInviteContactModal }) {
   //contexts
   const { authState } = useContext(AuthContext);
   const { currentUser } = authState;
-  //const { chatState, dispatch } = useContext(ChatContext);
-  //const { myContacts } = chatState;
+  const { chatState } = useContext(ChatContext);
+  const { myContacts } = chatState;
   // functions
   const handleJoin = async (user) => {
     const result = window
@@ -48,11 +48,11 @@ export function InviteContactModal({ setOpenInviteContactModal }) {
   }, []);
   useEffect(() => {
     if (usersData && usersData.getUsers) {
+      let usersWithOutCurrentUser = [];
       if(currentUser) {
-        setUsers(
-          usersData.getUsers.filter(item => item._id !== currentUser._id)
-        );
+        usersWithOutCurrentUser = usersData.getUsers.filter(item => item._id !== currentUser._id);
       }
+      setUsers(usersWithOutCurrentUser);
     }
   }, [usersData]);
 

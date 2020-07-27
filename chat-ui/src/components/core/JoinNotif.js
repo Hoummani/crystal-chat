@@ -17,15 +17,15 @@ export function JoinNotif () {
   const [acceptFrienship, { data: acceptFriendshipData }] = useMutation(ACCEPT_FRIENDSHIP);
 
   // functions
-  const acceptJoing = async (contact) => {
+  const acceptJoing = async (contact, notifId) => {
     const result = window.confirm("Confirm... this actions");
     if (result) {
-      console.log(contact);
       setAcceptedNotif(contact);
       try {
         await acceptFrienship({
           variables: {
-            contactId: contact._id
+            contactId: contact._id,
+            notifId: notifId
           }
         })
       } catch (err) {
@@ -125,7 +125,8 @@ export function JoinNotif () {
                                   type="button"
                                   className="text-xs text-white font-bold 
                                     py-1 bg-teal-400 px-3 focus:outline-none rounded-lg"
-                                  onClick={acceptJoing.bind(this, notif.contactAbout)}
+                                  onClick={acceptJoing.bind(this, notif.contactAbout, notif._id)}
+                                  disabled={notif.visited}
                                 >
                                   Accept
                                 </button>

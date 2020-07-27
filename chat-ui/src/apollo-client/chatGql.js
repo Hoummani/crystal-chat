@@ -64,6 +64,7 @@ export const GET_MY_NOTIFICATIONS = gql`
         lastName
         avatar
       }
+      visited
       createdAt
     }
   }
@@ -71,8 +72,8 @@ export const GET_MY_NOTIFICATIONS = gql`
 
 // accept friendship
 export const ACCEPT_FRIENDSHIP = gql`
-  mutation($contactId: ID!) {
-    acceptFrienship(contactId: $contactId){
+  mutation($contactId: ID!, $notifId: ID!) {
+    acceptFrienship(contactId: $contactId, notifId: $notifId){
       status
     }
   }

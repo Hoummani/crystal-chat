@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useLazyQuery } from '@apollo/react-hooks';
 import Moment from 'react-moment';
-//import { ChatContext } from '../../contexts/ChatContext';
+import { ChatContext } from '../../contexts/ChatContext';
 import { InviteContactModal } from './InviteContactModal';
 import { GET_MY_CONTACTS } from '../../apollo-client/chatGql';
 import { Loader } from '../core/Loader';
@@ -10,11 +10,11 @@ import { Loader } from '../core/Loader';
 export function MyContacts() {
 
   // states
-  const [contacts, setContacts] = useState([]);
+  //const [contacts, setContacts] = useState([]);
   const [openInviteContactModal, setOpenInviteContactModal] = useState(false);
   // contexts
-  //const { chatState } = useContext(ChatContext);
-  //const { myContacts } = chatState;
+  const { chatState, dispatch } = useContext(ChatContext);
+  const { myContacts } = chatState;
 
   // apollo
   const [getMyContacts, { data: myContactsData, loading }] = useLazyQuery(GET_MY_CONTACTS);
@@ -38,7 +38,8 @@ export function MyContacts() {
       myContactsData.getMyContacts.forEach(element => {
         arrContacts.push(element.friend);
       });
-      setContacts([...arrContacts]);
+      //setContacts([...arrContacts]);
+      dispatch({ type: 'SET_MY_CONTACTS', myContacts: arrContacts })
     }
   }, [myContactsData]);
   return (
@@ -70,9 +71,9 @@ export function MyContacts() {
         ) : null}
       </>
       <>
-        {contacts && contacts.length > 0 ? (
+        {myContacts && myContacts.length > 0 ? (
           <ul className="mt-1">
-            {contacts.map(contact => {
+            {myContacts.map(contact => {
               return (
                 <li 
                   key={contact._id} 
@@ -107,7 +108,7 @@ export function MyContacts() {
         ) : null}
       </>
       <>
-        {contacts && contacts.length < 1 && !loading ? (
+        { myContacts && myContacts.length < 1 && !loading ? (
           <div 
             className="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 
               px-4 py-3 shadow-md" 

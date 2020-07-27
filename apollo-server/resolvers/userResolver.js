@@ -1,8 +1,10 @@
 const { User } = require('../../models/User');
+const { Contact } = require('../../models/Contact');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { gql } = require('apollo-server-express');
+const { comparer } = require('../core_functionality/coreFunctions');
 
 // type defs
 exports.userTypeDefs = gql`
@@ -57,7 +59,12 @@ const resolvers = {
     getUsers: async (root, args, context) => {
       if (context.isLoggedIn) {
         try {
+          
           const users = await User.find();
+          /**
+           * const nativeContacts = await Contact.find({ user: context.userId, friendShip: true })
+            .populate('friend');
+           */
           return users.map(item => {
             return { ...item._doc };
           })

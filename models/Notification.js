@@ -18,6 +18,11 @@ const NotificationSchema = new Schema({
     ref: 'Contact',
     required: true
   },
+  visited: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
   content: {
     type: String,
     required: true

@@ -21,6 +21,7 @@ exports.contactTypeDefs = gql`
     receiver: User!
     content: String!
     contactAbout: Contact!
+    visited: Boolean
     createdAt: String
   }
   type SuccessOperation{
@@ -36,7 +37,7 @@ exports.contactTypeDefs = gql`
   # Mutation
   extend type Mutation {
     joinUser(friendId: ID!): Contact!
-    acceptFrienship(contactId: ID!): SuccessOperation!
+    acceptFrienship(contactId: ID!, notifId: ID!): SuccessOperation!
   }
 
   # Subscription
@@ -77,6 +78,10 @@ const resolvers = {
     joinUser: async (root, args, context) => {
       if (context.isLoggedIn) {
         try {
+          const anyContact = await Contact.findOne({ user: context.userId, friend: args.friendId })
+          if (anyContact) {
+            throw new Error("Already Joined");
+          }
           const contact = new Contact({
             _id: new mongoose.Types.ObjectId(),
             user: context.userId,
@@ -108,6 +113,10 @@ const resolvers = {
           const resultUp = await Contact.updateOne(
             { _id: args.contactId },
             {$set: { friendShip: true }}
+          );
+          await Notification.update(
+            { _id: args.notifId },
+            { $set: {visited: true} }
           );
           if (resultUp) {
             return { status: "OK" };
