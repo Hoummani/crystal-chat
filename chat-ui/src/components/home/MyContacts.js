@@ -1,6 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { ChatContext } from '../../contexts/ChatContext';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from 'react';
+import { useLazyQuery } from '@apollo/react-hooks';
+import Moment from 'react-moment';
+//import { ChatContext } from '../../contexts/ChatContext';
 import { InviteContactModal } from './InviteContactModal';
+import { GET_MY_CONTACTS } from '../../apollo-client/chatGql';
+import { Loader } from '../core/Loader';
 
 export function MyContacts() {
 
@@ -8,19 +13,34 @@ export function MyContacts() {
   const [contacts, setContacts] = useState([]);
   const [openInviteContactModal, setOpenInviteContactModal] = useState(false);
   // contexts
-  const { chatState } = useContext(ChatContext);
-  const { myContacts } = chatState;
+  //const { chatState } = useContext(ChatContext);
+  //const { myContacts } = chatState;
+
+  // apollo
+  const [getMyContacts, { data: myContactsData, loading }] = useLazyQuery(GET_MY_CONTACTS);
 
   // effects
+
   useEffect(() => {
-    if (myContacts) {
+    const loadMyContacts = async () => {
+      try {
+        await getMyContacts();
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    loadMyContacts();
+  }, [])
+  useEffect(() => {
+    if (myContactsData && myContactsData.getMyContacts) {
       let arrContacts = [];
-      myContacts.forEach(element => {
+      //console.log(myContactsData.getMyContacts)
+      myContactsData.getMyContacts.forEach(element => {
         arrContacts.push(element.friend);
       });
-      setContacts(arrContacts);
+      setContacts([...arrContacts]);
     }
-  }, [myContacts]);
+  }, [myContactsData]);
   return (
     <div className="bg-white pt-6 pl-4">
       <div
@@ -43,26 +63,51 @@ export function MyContacts() {
       </div>
       {/** List of contacts */}
       <>
+        {loading ? (
+          <div className="mt-6 flex justify-center">
+            <Loader />
+          </div>
+        ) : null}
+      </>
+      <>
         {contacts && contacts.length > 0 ? (
-          <ul>
-            <li className="py-2 pl-2 cursor-pointer hover:bg-gray-100 rounded-lg">
-              <div className="flex justify-start items-center">
-                <div className="relative mr-4">
-                  <div  
-                    className="text-sm w-10 h-10 leading-none 
-                      rounded-full bg-local bg-cover"
-                    style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
-                  />
-                  <span className="absolute w-3 h-3 bg-teal-300 rounded-full bottom-0 right-0" />
-                </div>
-                <div className="">
-                  <span className="block text-gray-700 text-md font-bold">Ahmed Amine</span>
-                  <span className="block text-gray-400 text-sm">02 Jully 2020</span>
-                </div>
-              </div>
-            </li>
+          <ul className="mt-1">
+            {contacts.map(contact => {
+              return (
+                <li 
+                  key={contact._id} 
+                  className="py-2 pl-2 cursor-pointer hover:bg-gray-100 rounded-lg"
+                > 
+                  <div className="flex justify-start items-center">
+                    <div className="relative mr-4">
+                      <div  
+                        className="text-sm w-10 h-10 leading-none 
+                          rounded-full bg-local bg-cover"
+                        style={{ backgroundImage: `url('${process.env.REACT_APP_FILES_STORE}${contact.avatar}` }}
+                      />
+                      <>
+                        {contact.isOnline ? (
+                          <span className="absolute w-3 h-3 bg-teal-300 rounded-full bottom-0 right-0" />
+                        ) : null}
+                      </>
+                    </div>
+                    <div className="">
+                      <span className="block text-gray-700 text-md font-bold">
+                        {contact.firstName} {contact.lastName}
+                      </span>
+                      <Moment fromNow className="block text-gray-400 text-xs">
+                        {new Date(Number(contact.lastLogIn))}
+                      </Moment>
+                    </div>
+                  </div>
+                </li>
+              )
+            })}
           </ul>
-        ) : (
+        ) : null}
+      </>
+      <>
+        {contacts && contacts.length < 1 && !loading ? (
           <div 
             className="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 
               px-4 py-3 shadow-md" 
@@ -89,7 +134,7 @@ export function MyContacts() {
               </div>
             </div>
           </div>
-        )}
+        ) : null}
       </>
       <>
         {openInviteContactModal ? 

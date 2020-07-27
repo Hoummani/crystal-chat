@@ -1,7 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from 'react';
 import Moment from 'react-moment';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
-/* eslint-disable react-hooks/exhaustive-deps */
 import { GET_USERS, JOIN_USER } from '../../apollo-client/chatGql';
 import { AuthContext } from '../../contexts/AuthContext';
 //import { ChatContext } from '../../contexts/ChatContext';

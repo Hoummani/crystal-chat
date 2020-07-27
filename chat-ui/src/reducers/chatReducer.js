@@ -3,9 +3,9 @@ export function chatReducer (state, action) {
     case 'SET_MY_CONTACTS' :
       return {
         ...state,
-        myContacts: {
+        myContacts: [
           ...action.myContacts
-        }
+        ]
       };
     case 'SET_CURRENT_CHAT':
       return {
