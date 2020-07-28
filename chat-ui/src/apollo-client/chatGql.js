@@ -28,6 +28,14 @@ export const GET_MY_CONTACTS = gql`
         isOnline
         lastLogIn
       }
+      user {
+        _id
+        firstName
+        lastName
+        isOnline
+        avatar
+        lastLogIn
+      }
     }
   }
 `;

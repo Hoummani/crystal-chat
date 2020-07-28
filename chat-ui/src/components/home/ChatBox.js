@@ -6,14 +6,15 @@ export function ChatBox() {
 
   // context
   const { chatState } = useContext(ChatContext);
-  const { currentChat } = chatState;
+  const { currentContact } = chatState;
 
   // effects
   useEffect(() => {
-    if (currentChat) {
-      console.log("Current Chat :" + currentChat);
+    if (currentContact) {
+      console.log("Current Contact :" + currentContact);
     }
-  }, [currentChat])
+  }, [currentContact]);
+  useEffect(() => {}, [])
   return (
     <>
     <div 

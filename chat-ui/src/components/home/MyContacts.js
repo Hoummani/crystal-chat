@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useLazyQuery } from '@apollo/react-hooks';
 import Moment from 'react-moment';
 import { ChatContext } from '../../contexts/ChatContext';
+import { AuthContext } from '../../contexts/AuthContext';
 import { InviteContactModal } from './InviteContactModal';
 import { GET_MY_CONTACTS } from '../../apollo-client/chatGql';
 import { Loader } from '../core/Loader';
@@ -12,13 +13,20 @@ export function MyContacts() {
   // states
   //const [contacts, setContacts] = useState([]);
   const [openInviteContactModal, setOpenInviteContactModal] = useState(false);
+  const [nativeContacts, setNativeContacts] = useState([]);
   // contexts
   const { chatState, dispatch } = useContext(ChatContext);
   const { myContacts } = chatState;
+  const { authState } = useContext(AuthContext);
+  const { currentUser } = authState;
 
   // apollo
   const [getMyContacts, { data: myContactsData, loading }] = useLazyQuery(GET_MY_CONTACTS);
 
+  // functions
+  const handleContactChoise = async (contactId) => {
+    dispatch({ type: 'SET_CURRENT_CONTACT', currentContact: contactId });
+  }
   // effects
 
   useEffect(() => {
@@ -33,15 +41,24 @@ export function MyContacts() {
   }, [])
   useEffect(() => {
     if (myContactsData && myContactsData.getMyContacts) {
-      let arrContacts = [];
-      //console.log(myContactsData.getMyContacts)
-      myContactsData.getMyContacts.forEach(element => {
-        arrContacts.push(element.friend);
-      });
-      //setContacts([...arrContacts]);
-      dispatch({ type: 'SET_MY_CONTACTS', myContacts: arrContacts })
+      setNativeContacts(myContactsData.getMyContacts)
     }
   }, [myContactsData]);
+  useEffect(() => {
+    if (nativeContacts && nativeContacts.length > 0) {
+      let extractedArr = [];
+      nativeContacts.forEach(item => {
+        if (item.friend && item.user && currentUser) {
+          if (item.friend._id === currentUser._id){
+            extractedArr.push(item.user);
+          } else {
+            extractedArr.push(item.friend);
+          }
+        }
+      });
+      dispatch({ type: 'SET_MY_CONTACTS', myContacts: extractedArr })
+    }
+  }, [nativeContacts]);
   return (
     <div className="bg-white pt-6 pl-4">
       <div
@@ -77,7 +94,9 @@ export function MyContacts() {
               return (
                 <li 
                   key={contact._id} 
-                  className="py-2 pl-2 cursor-pointer hover:bg-gray-100 rounded-lg"
+                  className="py-2 pl-2 cursor-pointer 
+                    hover:bg-gray-100 active:bg-gray-100 rounded-lg"
+                  onClick={handleContactChoise.bind(this, contact._id)}
                 > 
                   <div className="flex justify-start items-center">
                     <div className="relative mr-4">

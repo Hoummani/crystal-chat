@@ -7,13 +7,23 @@ export function chatReducer (state, action) {
           ...action.myContacts
         ]
       };
-    case 'SET_CURRENT_CHAT':
+    case 'SET_CURRENT_CONTACT':
       return {
         ...state,
-        currentChat: {
-          ...action.currentChat
-        }
+        currentContact: action.currentContact
       };
+    case 'SET_CHATS':
+      return {
+        ...state,
+        chat: [
+          ...action.chats
+        ]
+      }
+    case 'CLEAR_CHATS':
+      return {
+        ...state,
+        chats: []
+      }
     default:
       return state;
   }

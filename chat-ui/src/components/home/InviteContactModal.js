@@ -11,6 +11,7 @@ import './modal_style.css';
 export function InviteContactModal({ setOpenInviteContactModal }) {
   // states
   const [users, setUsers] = useState([]);
+  const [contactsId, setContactsId] = useState([]);
   // apollo
   const [getUsers, { data: usersData, loading:usersLoading }] = useLazyQuery(GET_USERS);
   const [joinUser, { data: joinData }] = useMutation(JOIN_USER);
@@ -47,12 +48,21 @@ export function InviteContactModal({ setOpenInviteContactModal }) {
     loadUsers();
   }, []);
   useEffect(() => {
+    if (myContacts && myContacts.length > 0) {
+      let arrContactIDs = [];
+      myContacts.forEach(item => {
+        arrContactIDs.push(item._id);
+      });
+      setContactsId(arrContactIDs);
+    }
+  }, [myContacts])
+  useEffect(() => {
     if (usersData && usersData.getUsers) {
       let usersWithOutCurrentUser = [];
       if(currentUser) {
         usersWithOutCurrentUser = usersData.getUsers.filter(item => item._id !== currentUser._id);
       }
-      setUsers(usersWithOutCurrentUser);
+      setUsers(usersWithOutCurrentUser.filter(item => !contactsId.includes(item._id)));
     }
   }, [usersData]);
 

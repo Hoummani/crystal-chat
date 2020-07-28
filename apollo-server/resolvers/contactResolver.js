@@ -50,7 +50,15 @@ const resolvers = {
     getMyContacts: async (root, args, context) => {
       if (context.isLoggedIn) {
         try {
-          const contacts = await Contact.find({ user: context.userId, friendShip: true })
+          //const contacts = await Contact.find({ user: context.userId, friendShip: true })
+          const contacts = await Contact.find(
+            {$or:[ 
+              {'user':context.userId}, 
+              {'friend':context.userId}
+            ], 
+            friendShip: true
+            })
+            .populate('user')
             .populate('friend');
           return contacts.map(item => {
             return { ...item._doc };
@@ -114,7 +122,7 @@ const resolvers = {
             { _id: args.contactId },
             {$set: { friendShip: true }}
           );
-          await Notification.update(
+          await Notification.updateOne(
             { _id: args.notifId },
             { $set: {visited: true} }
           );

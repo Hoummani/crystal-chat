@@ -17,6 +17,11 @@ const ChatSchema = new Schema({
     ref: 'User',
     required: true
   },
+  contact: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Contact',
+    required: true
+  }
   
 },{
   timestamps: true
