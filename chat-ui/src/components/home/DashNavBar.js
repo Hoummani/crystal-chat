@@ -26,7 +26,8 @@ export function DashNavBar() {
       </div>
       <div className="flex justify-end items-center">
         <JoinNotif />
-        <a href="#" className="text-white mr-8 relative">
+        {/**
+         * <a href="#" className="text-white mr-8 relative">
           <span>
             <i 
               className="fab fa-facebook-messenger font-semibold text-2xl tracking-tight" 
@@ -38,6 +39,7 @@ export function DashNavBar() {
             3
           </span>
         </a>
+         */}
         <div className="relative">
           <div  
             className="text-sm w-10 h-10 leading-none 

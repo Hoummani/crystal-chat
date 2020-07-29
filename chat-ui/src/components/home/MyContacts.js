@@ -5,7 +5,7 @@ import Moment from 'react-moment';
 import { ChatContext } from '../../contexts/ChatContext';
 import { AuthContext } from '../../contexts/AuthContext';
 import { InviteContactModal } from './InviteContactModal';
-import { GET_MY_CONTACTS } from '../../apollo-client/chatGql';
+import { GET_MY_CONTACTS} from '../../apollo-client/chatGql';
 import { Loader } from '../core/Loader';
 
 export function MyContacts() {
@@ -22,10 +22,9 @@ export function MyContacts() {
 
   // apollo
   const [getMyContacts, { data: myContactsData, loading }] = useLazyQuery(GET_MY_CONTACTS);
-
   // functions
-  const handleContactChoise = async (contactId) => {
-    dispatch({ type: 'SET_CURRENT_CONTACT', currentContact: contactId });
+  const handleContactChoise = async (receiverId) => {
+    dispatch({ type: 'SET_CURRENT_RECEIVER', currentReceiver: receiverId });
   }
   // effects
 

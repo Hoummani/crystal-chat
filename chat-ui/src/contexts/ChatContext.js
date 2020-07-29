@@ -7,6 +7,7 @@ export function ChatContextProvider(props) {
   const state = {
     myContacts: [],
     currentContact: null,
+    currentReceiver: null,
     chats: []
   };
   const [chatState, dispatch] = useReducer(chatReducer, state);

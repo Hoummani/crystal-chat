@@ -20,7 +20,7 @@ const ChatSchema = new Schema({
   contact: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Contact',
-    required: true
+    required: false
   }
   
 },{

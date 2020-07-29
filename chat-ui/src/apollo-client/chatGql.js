@@ -86,3 +86,31 @@ export const ACCEPT_FRIENDSHIP = gql`
     }
   }
 `;
+
+// get chats
+export const GET_CHATS = gql`
+  query($receiver: ID!){
+    getChats(receiver: $receiver){
+      _id
+      content
+      sender{
+        _id
+      }
+      createdAt
+    }
+  }
+`;
+
+// send chat to friend
+export const SEND_CHAT_TO = gql`
+  mutation(
+    $content: String!
+    $receiver: ID!
+  ){
+    sendChatTo(content: $content, receiver: $receiver){
+      _id
+      content
+      createdAt
+    }
+  }
+`;

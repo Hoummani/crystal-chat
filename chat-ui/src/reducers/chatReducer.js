@@ -12,10 +12,15 @@ export function chatReducer (state, action) {
         ...state,
         currentContact: action.currentContact
       };
+    case 'SET_CURRENT_RECEIVER':
+    return {
+      ...state,
+      currentReceiver: action.currentReceiver
+    };
     case 'SET_CHATS':
       return {
         ...state,
-        chat: [
+        chats: [
           ...action.chats
         ]
       }
