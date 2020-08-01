@@ -3,6 +3,7 @@ import React, { useContext, useEffect } from 'react';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { ChatBoxForm } from './ChatBoxForm';
 import { ChatContext } from '../../contexts/ChatContext';
+import { AuthContext } from '../../contexts/AuthContext';
 import { GET_CHATS } from '../../apollo-client/chatGql';
 import { Loader } from '../core/Loader';
 
@@ -11,7 +12,8 @@ export function ChatBox() {
   // context
   const { chatState, dispatch } = useContext(ChatContext);
   const { currentReceiver, chats } = chatState;
-
+  const { authState } = useContext(AuthContext);
+  const { currentUser } = authState;
   // apollo
   const [getChats, { data: chatsData, loading: chatsLoading }] = useLazyQuery(GET_CHATS);
   // effects
@@ -56,52 +58,61 @@ export function ChatBox() {
         <>
           { chats && chats.length > 0 ? (
             <>
-              <ul className="friend-chat my-6">
-                <li>
-                  <div className="flex justify-start">
-                    <div className="relative mr-4">
-                      <div  
-                        className="text-sm w-10 h-10 leading-none 
-                          rounded-full bg-local bg-cover"
-                        style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
-                      />
-                    </div>
-                    <div 
-                      className="bg-gray-200 text-sm border-1 
-                        border-gray-700 rounded-lg w-full md:w-64 px-2 py-2"
-                    >
-                      Hi there I'am lokking for a simple chart of my life
-                    </div>
+              {chats.map(chat => {
+                return (
+                  <div key={chat._id}>
+                    { currentUser && chat.sender && currentUser._id === chat.sender._id ? (
+                      <ul className="my-chat my-6">
+                        <li>
+                          <div className="flex justify-end">
+                            <div 
+                              className="bg-teal-500 text-white text-sm border-1 
+                                border-gray-700 rounded-lg w-full md:w-64 px-2 py-2"
+                            >
+                              {chat.content}
+                            </div>
+                            <div className="relative mr-4">
+                              <div  
+                                className="text-sm ml-2 w-10 h-10 leading-none 
+                                  rounded-full bg-local bg-cover"
+                                style={{ backgroundImage: `url('${process.env.REACT_APP_FILES_STORE}${currentUser.avatar}` }}
+                              />
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    ): (
+                      <ul className="friend-chat my-6">
+                        <li>
+                          <div className="flex justify-start">
+                            <div className="relative mr-4">
+                              <div  
+                                className="text-sm w-10 h-10 leading-none 
+                                  rounded-full bg-local bg-cover"
+                                style={{ backgroundImage: `url('${process.env.REACT_APP_FILES_STORE}${chat.sender.avatar}` }}
+                              />
+                            </div>
+                            <div 
+                              className="bg-gray-200 text-sm border-1 
+                                border-gray-700 rounded-lg w-full md:w-64 px-2 py-2"
+                            >
+                              {chat.content}
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    ) }
                   </div>
-                </li>
-              </ul>
-              <ul className="my-chat my-6">
-                <li>
-                  <div className="flex justify-end">
-                    <div 
-                      className="bg-teal-500 text-white text-sm border-1 
-                        border-gray-700 rounded-lg w-full md:w-64 px-2 py-2"
-                    >
-                      Hi there I'am lokking for a simple hhhhhhhhhhhhhhhhhhh chart of my life
-                    </div>
-                    <div className="relative mr-4">
-                      <div  
-                        className="text-sm ml-2 w-10 h-10 leading-none 
-                          rounded-full bg-local bg-cover"
-                        style={{ backgroundImage: " url('/img/bg-1.jpg')" }}
-                      />
-                    </div>
-                  </div>
-                </li>
-              </ul>
+                )
+              })}
             </>
           ) : (
             <div 
-                className="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 
-                  px-4 py-3 shadow-md" 
+                className="px-4 py-3" 
                 role="alert"
             >
-              <div className="flex">
+              {/**
+               * <div className="flex">
                 <div className="py-1">
                   <svg 
                     className="fill-current h-6 w-6 text-teal-500 mr-4" 
@@ -121,6 +132,14 @@ export function ChatBox() {
                     allow you to make a new reel time chats with your friends.
                   </p>
                 </div>
+              </div>
+               */}
+              <div className="py-1">
+                <img 
+                  src="/img/undraw_Friends_online_re_r7pq.svg" 
+                  className="" 
+                  alt="no_chat-data" 
+                />
               </div>
             </div>
           ) }

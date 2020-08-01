@@ -95,6 +95,10 @@ export const GET_CHATS = gql`
       content
       sender{
         _id
+        avatar
+      }
+      receiver {
+        _id
       }
       createdAt
     }
@@ -110,6 +114,9 @@ export const SEND_CHAT_TO = gql`
     sendChatTo(content: $content, receiver: $receiver){
       _id
       content
+      sender{
+        _id
+      }
       createdAt
     }
   }

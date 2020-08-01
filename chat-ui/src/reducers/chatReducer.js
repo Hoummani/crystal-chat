@@ -24,6 +24,14 @@ export function chatReducer (state, action) {
           ...action.chats
         ]
       }
+    case 'ADD_CHAT':
+      return {
+        ...state,
+        chats: [
+          ...action.chats,
+          action.newChat
+        ]
+      }
     case 'CLEAR_CHATS':
       return {
         ...state,

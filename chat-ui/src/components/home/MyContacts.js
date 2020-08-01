@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useContext } from 'react';
 import { useLazyQuery } from '@apollo/react-hooks';
 import Moment from 'react-moment';
@@ -16,7 +17,7 @@ export function MyContacts() {
   const [nativeContacts, setNativeContacts] = useState([]);
   // contexts
   const { chatState, dispatch } = useContext(ChatContext);
-  const { myContacts } = chatState;
+  const { myContacts, currentReceiver } = chatState;
   const { authState } = useContext(AuthContext);
   const { currentUser } = authState;
 
@@ -88,41 +89,47 @@ export function MyContacts() {
       </>
       <>
         {myContacts && myContacts.length > 0 ? (
-          <ul className="mt-1">
+          <div className="mt-1">
             {myContacts.map(contact => {
               return (
-                <li 
+                <ul 
                   key={contact._id} 
-                  className="py-2 pl-2 cursor-pointer 
-                    hover:bg-gray-100 active:bg-gray-100 rounded-lg"
-                  onClick={handleContactChoise.bind(this, contact._id)}
                 > 
-                  <div className="flex justify-start items-center">
-                    <div className="relative mr-4">
-                      <div  
-                        className="text-sm w-10 h-10 leading-none 
-                          rounded-full bg-local bg-cover"
-                        style={{ backgroundImage: `url('${process.env.REACT_APP_FILES_STORE}${contact.avatar}` }}
-                      />
-                      <>
-                        {contact.isOnline ? (
-                          <span className="absolute w-3 h-3 bg-teal-300 rounded-full bottom-0 right-0" />
-                        ) : null}
-                      </>
+                  <li 
+                    className={`${currentReceiver && currentReceiver === contact._id ? 'bg-gray-200': ''}
+                      focus:bg-gray-200 w-full focus:outline-none active:bg-gray-200 
+                      py-2 pl-2 cursor-pointer hover:bg-gray-100 rounded-lg`}
+                    onClick={handleContactChoise.bind(this, contact._id)}
+                  >
+                    <div className="flex justify-start items-center">
+                      <div className="relative mr-4">
+                        <div  
+                          className="text-sm w-10 h-10 leading-none 
+                            rounded-full bg-local bg-cover"
+                          style={{ backgroundImage: `url('${process.env.REACT_APP_FILES_STORE}${contact.avatar}` }}
+                        />
+                        <>
+                          {contact.isOnline ? (
+                            <span className="absolute w-3 h-3 bg-teal-300 rounded-full bottom-0 right-0" />
+                          ) : null}
+                        </>
+                      </div>
+                      <div className="">
+                        <div className="text-gray-700 text-md font-bold">
+                          {contact.firstName} {contact.lastName}
+                        </div>
+                        <div className="">
+                          <Moment fromNow className="text-gray-400 text-xs">
+                            {new Date(Number(contact.lastLogIn))}
+                          </Moment>
+                        </div>
+                      </div>
                     </div>
-                    <div className="">
-                      <span className="block text-gray-700 text-md font-bold">
-                        {contact.firstName} {contact.lastName}
-                      </span>
-                      <Moment fromNow className="block text-gray-400 text-xs">
-                        {new Date(Number(contact.lastLogIn))}
-                      </Moment>
-                    </div>
-                  </div>
-                </li>
+                  </li>
+                </ul>
               )
             })}
-          </ul>
+          </div>
         ) : null}
       </>
       <>

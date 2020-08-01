@@ -21,7 +21,7 @@ exports.chatTypeDefs = gql`
   
   # Mutation
   extend type Mutation {
-    sendChatTo(Content: String!, receiver: ID!): Chat!
+    sendChatTo(content: String!, receiver: ID!): Chat!
   }
 
   # Subscription
@@ -33,7 +33,22 @@ const resolvers = {
     getChats: async (root, args, context) => {
       if (context.isLoggedIn) {
         try {
-          const chats = await Chat.find({ receiver: args.receiver });
+          let chats = await Chat.find({ 
+            $or: [
+              {
+                $and: [
+                  {'sender': context.userId}, 
+                  {'receiver': args.receiver}
+                ]
+              },
+              {
+                $and:[ 
+                  {'receiver': context.userId}, 
+                  {'sender': args.receiver}
+                ]
+              }
+            ]
+           }).populate('sender');
           /**
            * $and:[ 
               {'sender': context.userId}, 
