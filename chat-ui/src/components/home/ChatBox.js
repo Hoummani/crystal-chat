@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery, useSubscription } from '@apollo/react-hooks';
 import { ChatBoxForm } from './ChatBoxForm';
 import { ChatContext } from '../../contexts/ChatContext';
 import { AuthContext } from '../../contexts/AuthContext';
-import { GET_CHATS } from '../../apollo-client/chatGql';
+import { GET_CHATS, NEW_CHAT } from '../../apollo-client/chatGql';
 import { Loader } from '../core/Loader';
 
 export function ChatBox() {
@@ -16,6 +16,7 @@ export function ChatBox() {
   const { currentUser } = authState;
   // apollo
   const [getChats, { data: chatsData, loading: chatsLoading }] = useLazyQuery(GET_CHATS);
+  const { data: newChatData } = useSubscription(NEW_CHAT);
   // effects
   useEffect(() => {
     if (currentReceiver) {
@@ -38,7 +39,14 @@ export function ChatBox() {
     if (chatsData && chatsData.getChats) {
       dispatch({ type: 'SET_CHATS', chats: chatsData.getChats });
     }
-  }, [chatsData])
+  }, [chatsData]);
+
+  // real staff effects
+  useEffect(() => {
+    if (newChatData && newChatData.newChat) {
+      dispatch({ type: 'ADD_CHAT', chats: chats, newChat: newChatData.newChat });
+    }
+  }, [newChatData]);
   return (
     <>
     <div 

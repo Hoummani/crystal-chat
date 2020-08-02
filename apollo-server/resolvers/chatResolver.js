@@ -3,6 +3,8 @@ const { Contact } = require('../../models/Contact');
 const { User } = require('../../models/User');
 const mongoose = require('mongoose');
 const { gql } = require('apollo-server-express');
+const { pubSub, NEW_CHAT } = require('../pubsubEngine/pubSubRedis');
+const { withFilter } = require('graphql-subscriptions');
 
 exports.chatTypeDefs = gql`
   # Chat
@@ -25,7 +27,9 @@ exports.chatTypeDefs = gql`
   }
 
   # Subscription
-  #extend type Subscription {}
+  extend type Subscription {
+    newChat: Chat!
+  }
 `;
 
 const resolvers = {
@@ -76,6 +80,9 @@ const resolvers = {
           });
           const result = await chat.save();
           if (result) {
+            const backChat = await Chat.find({ _id: chat._id })
+              .populate('sender');
+            pubSub.publish(NEW_CHAT, { newChat: backChat });
             return { ...result._doc };
           }
         } catch (err) {
@@ -85,7 +92,18 @@ const resolvers = {
     }
   },
   Subscription: {
-
+    newChat: {
+      subscribe: withFilter(
+        () => pubSub.asyncIterator('NEW_CHAT'),
+        (payload, variables, context, info) => {
+          if (context.userId === payload.newChat.receiver.toString()) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+      ),
+    },
   }
 }
 

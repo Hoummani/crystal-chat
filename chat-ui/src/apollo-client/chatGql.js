@@ -121,3 +121,21 @@ export const SEND_CHAT_TO = gql`
     }
   }
 `;
+
+// new chat subscription
+export const NEW_CHAT = gql`
+  subscription{
+    newContribution{
+      _id
+      content
+      sender{
+        _id
+        avatar
+      }
+      receiver {
+        _id
+      }
+      createdAt
+    }
+  }
+`;
