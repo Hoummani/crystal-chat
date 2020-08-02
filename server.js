@@ -52,6 +52,7 @@ const server = new ApolloServer({
         if (authToken && authToken !== '') {
           decoded = await jwt.verify(authToken, process.env.JWT_KEY);
           if (decoded) {
+            //console.log(decoded);
             return { userId: decoded.userId, isLoggedIn: true };
           }
         }

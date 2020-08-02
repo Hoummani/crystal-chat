@@ -16,7 +16,7 @@ export function ChatBox() {
   const { currentUser } = authState;
   // apollo
   const [getChats, { data: chatsData, loading: chatsLoading }] = useLazyQuery(GET_CHATS);
-  const { data: newChatData } = useSubscription(NEW_CHAT);
+  const { data: newChatData, error } = useSubscription(NEW_CHAT);
   // effects
   useEffect(() => {
     if (currentReceiver) {
@@ -44,9 +44,13 @@ export function ChatBox() {
   // real staff effects
   useEffect(() => {
     if (newChatData && newChatData.newChat) {
+      console.log(newChatData);
       dispatch({ type: 'ADD_CHAT', chats: chats, newChat: newChatData.newChat });
     }
-  }, [newChatData]);
+    if (error) {
+      console.log(error);
+    }
+  }, [newChatData, error]);
   return (
     <>
     <div 

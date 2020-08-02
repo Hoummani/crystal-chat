@@ -22,7 +22,6 @@ export function ChatBoxForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (content !== '' && currentReceiver) {
-      setContent('');
       try {
         await sendChatTo({
           variables: {
@@ -39,7 +38,8 @@ export function ChatBoxForm() {
   // effects
   useEffect(() => {
     if (sendChatData && sendChatData.sendChatTo) {
-      dispatch({ type: 'ADD_CHAT', chats: chats, newChat: sendChatData.sendChatTo })
+      dispatch({ type: 'ADD_CHAT', chats: chats, newChat: sendChatData.sendChatTo });
+      setContent('');
     }
   }, [sendChatData])
   return (

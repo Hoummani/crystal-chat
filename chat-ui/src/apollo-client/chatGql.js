@@ -124,8 +124,8 @@ export const SEND_CHAT_TO = gql`
 
 // new chat subscription
 export const NEW_CHAT = gql`
-  subscription{
-    newContribution{
+  subscription {
+    newChat {
       _id
       content
       sender{

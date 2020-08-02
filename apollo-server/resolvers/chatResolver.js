@@ -3,8 +3,9 @@ const { Contact } = require('../../models/Contact');
 const { User } = require('../../models/User');
 const mongoose = require('mongoose');
 const { gql } = require('apollo-server-express');
-const { pubSub, NEW_CHAT } = require('../pubsubEngine/pubSubRedis');
+const { pubsub, NEW_CHAT } = require('../pubsubEngine/pubSubRedis');
 const { withFilter } = require('graphql-subscriptions');
+//const { withFilter } = require('apollo-server-express');
 
 exports.chatTypeDefs = gql`
   # Chat
@@ -80,9 +81,10 @@ const resolvers = {
           });
           const result = await chat.save();
           if (result) {
-            const backChat = await Chat.find({ _id: chat._id })
-              .populate('sender');
-            pubSub.publish(NEW_CHAT, { newChat: backChat });
+            const newChat = await Chat.findOne({ _id: chat._id })
+              .populate('sender')
+              .populate('receiver');
+            await pubsub.publish(NEW_CHAT, { newChat: newChat });
             return { ...result._doc };
           }
         } catch (err) {
@@ -94,9 +96,11 @@ const resolvers = {
   Subscription: {
     newChat: {
       subscribe: withFilter(
-        () => pubSub.asyncIterator('NEW_CHAT'),
+        () => pubsub.asyncIterator('NEW_CHAT'),
         (payload, variables, context, info) => {
-          if (context.userId === payload.newChat.receiver.toString()) {
+          //console.log("Before checking user");
+          //console.log(payload.newChat);
+          if (context.userId === payload.newChat.receiver._id.toString()) {
             return true;
           } else {
             return false;

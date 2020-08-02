@@ -15,6 +15,7 @@ export function MyContacts() {
   //const [contacts, setContacts] = useState([]);
   const [openInviteContactModal, setOpenInviteContactModal] = useState(false);
   const [nativeContacts, setNativeContacts] = useState([]);
+  const [uiLoading, setUiLoading] = useState(false);
   // contexts
   const { chatState, dispatch } = useContext(ChatContext);
   const { myContacts, currentReceiver } = chatState;
@@ -46,17 +47,21 @@ export function MyContacts() {
   }, [myContactsData]);
   useEffect(() => {
     if (nativeContacts && nativeContacts.length > 0) {
-      let extractedArr = [];
-      nativeContacts.forEach(item => {
-        if (item.friend && item.user && currentUser) {
-          if (item.friend._id === currentUser._id){
-            extractedArr.push(item.user);
-          } else {
-            extractedArr.push(item.friend);
+      setUiLoading(true);
+      setTimeout(() => {
+        setUiLoading(false);
+        let extractedArr = [];
+        nativeContacts.forEach(item => {
+          if (item.friend && item.user && currentUser) {
+            if (item.friend._id === currentUser._id){
+              extractedArr.push(item.user);
+            } else {
+              extractedArr.push(item.friend);
+            }
           }
-        }
-      });
-      dispatch({ type: 'SET_MY_CONTACTS', myContacts: extractedArr })
+        });
+        dispatch({ type: 'SET_MY_CONTACTS', myContacts: extractedArr })
+      }, 1500);
     }
   }, [nativeContacts]);
   return (
@@ -81,7 +86,7 @@ export function MyContacts() {
       </div>
       {/** List of contacts */}
       <>
-        {loading ? (
+        {loading || uiLoading ? (
           <div className="mt-6 flex justify-center">
             <Loader />
           </div>
@@ -133,7 +138,7 @@ export function MyContacts() {
         ) : null}
       </>
       <>
-        { myContacts && myContacts.length < 1 && !loading ? (
+        { myContacts && myContacts.length < 1 && !loading && !uiLoading ? (
           <div 
             className="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 
               px-4 py-3 shadow-md" 
