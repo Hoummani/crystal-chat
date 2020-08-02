@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { useLazyQuery, useSubscription } from '@apollo/react-hooks';
 import { ChatBoxForm } from './ChatBoxForm';
 import { ChatContext } from '../../contexts/ChatContext';
@@ -17,6 +17,9 @@ export function ChatBox() {
   // apollo
   const [getChats, { data: chatsData, loading: chatsLoading }] = useLazyQuery(GET_CHATS);
   const { data: newChatData, error } = useSubscription(NEW_CHAT);
+
+  // refs
+  const scrollabChat = useRef();
   // effects
   useEffect(() => {
     if (currentReceiver) {
@@ -44,18 +47,22 @@ export function ChatBox() {
   // real staff effects
   useEffect(() => {
     if (newChatData && newChatData.newChat) {
-      console.log(newChatData);
       dispatch({ type: 'ADD_CHAT', chats: chats, newChat: newChatData.newChat });
     }
     if (error) {
       console.log(error);
     }
   }, [newChatData, error]);
+
+  useEffect(() => {
+    scrollabChat.current.scrollTop = scrollabChat.current.scrollHeight;
+  }, [chats]);
   return (
     <>
     <div 
       className="md:col-span-2 p-6 bg-fixed h-full md:overflow-y-auto"
       style={{backgroundImage: "url('/img/bg_oc_things_grey.jpeg')", height: "85vh"}}
+      ref={scrollabChat}
     >
       <div 
         className="chat-content"

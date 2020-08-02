@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { ChatContext } from '../../contexts/ChatContext';
 import { SEND_CHAT_TO } from '../../apollo-client/chatGql';
@@ -15,6 +15,9 @@ export function ChatBoxForm() {
 
   // apollo
   const [sendChatTo, { data: sendChatData }] = useMutation(SEND_CHAT_TO);
+
+  // refs
+  const inputRef = useRef();
   // functions
   const handleChange = (e) => {
     setContent(e.target.value);
@@ -40,6 +43,7 @@ export function ChatBoxForm() {
     if (sendChatData && sendChatData.sendChatTo) {
       dispatch({ type: 'ADD_CHAT', chats: chats, newChat: sendChatData.sendChatTo });
       setContent('');
+      inputRef.current.value = "";
     }
   }, [sendChatData])
   return (
@@ -49,6 +53,7 @@ export function ChatBoxForm() {
           aria-label="Message" 
           name="message" 
           id="message"
+          ref={inputRef}
           onChange={handleChange}
           type="text" 
           placeholder="Message.." 

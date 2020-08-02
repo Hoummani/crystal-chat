@@ -47,19 +47,19 @@ export function MyContacts() {
   }, [myContactsData]);
   useEffect(() => {
     if (nativeContacts && nativeContacts.length > 0) {
+      let extractedArr = [];
       setUiLoading(true);
+      nativeContacts.forEach(item => {
+        if (item.friend && item.user && currentUser) {
+          if (item.friend._id === currentUser._id){
+            extractedArr.push(item.user);
+          } else {
+            extractedArr.push(item.friend);
+          }
+        }
+      });
       setTimeout(() => {
         setUiLoading(false);
-        let extractedArr = [];
-        nativeContacts.forEach(item => {
-          if (item.friend && item.user && currentUser) {
-            if (item.friend._id === currentUser._id){
-              extractedArr.push(item.user);
-            } else {
-              extractedArr.push(item.friend);
-            }
-          }
-        });
         dispatch({ type: 'SET_MY_CONTACTS', myContacts: extractedArr })
       }, 1500);
     }
