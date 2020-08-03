@@ -2,8 +2,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import Moment from 'react-moment';
-import { useLazyQuery, useMutation } from '@apollo/react-hooks';
-import { GET_MY_NOTIFICATIONS, ACCEPT_FRIENDSHIP } from '../../apollo-client/chatGql';
+import { useLazyQuery, useMutation, useSubscription } from '@apollo/react-hooks';
+import { 
+  GET_MY_NOTIFICATIONS, 
+  ACCEPT_FRIENDSHIP, 
+  NEW_JOINED_CONTACT
+} from '../../apollo-client/chatGql';
 
 export function JoinNotif () {
 
@@ -15,12 +19,13 @@ export function JoinNotif () {
   // apollo
   const [getMyNotifications, { data: notifsData }] = useLazyQuery(GET_MY_NOTIFICATIONS);
   const [acceptFrienship, { data: acceptFriendshipData }] = useMutation(ACCEPT_FRIENDSHIP);
+  const { data: newJoinedContactData, error } = useSubscription(NEW_JOINED_CONTACT); 
 
   // functions
   const acceptJoing = async (contact, notifId) => {
     const result = window.confirm("Confirm... this actions");
     if (result) {
-      setAcceptedNotif(contact);
+      setAcceptedNotif(notifId);
       try {
         await acceptFrienship({
           variables: {
@@ -52,10 +57,20 @@ export function JoinNotif () {
 
   // accept friendship effect
   useEffect(() => {
-    if (acceptFriendshipData && acceptFriendshipData.acceptFrienship) {
-      setNotifs(notifs.filter(item => item._id !== acceptedNotif._id));
+    if (acceptFriendshipData && acceptFriendshipData.acceptFrienship && acceptedNotif) {
+      setNotifs(notifs.filter(item => item._id !== acceptedNotif));
     }
   }, [acceptFriendshipData]);
+
+
+  useEffect(() => {
+    if (newJoinedContactData && newJoinedContactData.newJoinedContact) {
+      setNotifs([...notifs, newJoinedContactData.newJoinedContact]);
+    }
+    if (error) {
+      console.log(error);
+    }
+  }, [newJoinedContactData, error]);
   return (
     <div 
       className="relative z-50"

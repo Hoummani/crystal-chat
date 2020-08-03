@@ -139,3 +139,50 @@ export const NEW_CHAT = gql`
     }
   }
 `;
+
+// accept friendship reel data
+export const NEW_FRIENDSHIP_ACCEPT = gql`
+  subscription {
+    newFriendshipAccept {
+      _id
+      friend {
+        _id
+        firstName
+        lastName
+        avatar
+        isOnline
+        lastLogIn
+      }
+      user {
+        _id
+        firstName
+        lastName
+        isOnline
+        avatar
+        lastLogIn
+      }
+    }
+  }
+`;
+
+// joined contact subscription
+
+export const NEW_JOINED_CONTACT = gql`
+  subscription {
+    newJoinedContact {
+      _id
+      content
+      contactAbout {
+        _id
+      }
+      sender {
+        _id
+        firstName
+        lastName
+        avatar
+      }
+      visited
+      createdAt
+    }
+  }
+`;

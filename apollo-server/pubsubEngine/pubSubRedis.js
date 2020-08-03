@@ -3,7 +3,8 @@ const { RedisPubSub } = require('graphql-redis-subscriptions');
 
 // pubsub consts
 exports.NEW_CHAT = 'NEW_CHAT';
-
+exports.NEW_FRIENDSHIP_ACCEPT = 'NEW_FRIENDSHIP_ACCEPT';
+exports.NEW_JOINED_CONTACT = 'NEW_JOINED_CONTACT';
 
 //const pubsub = new PubSub();
 //exports.pubsub = pubsub;

@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useContext } from 'react';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery, useSubscription } from '@apollo/react-hooks';
 import Moment from 'react-moment';
 import { ChatContext } from '../../contexts/ChatContext';
 import { AuthContext } from '../../contexts/AuthContext';
 import { InviteContactModal } from './InviteContactModal';
-import { GET_MY_CONTACTS} from '../../apollo-client/chatGql';
+import { GET_MY_CONTACTS, NEW_FRIENDSHIP_ACCEPT} from '../../apollo-client/chatGql';
 import { Loader } from '../core/Loader';
 
 export function MyContacts() {
@@ -24,6 +24,7 @@ export function MyContacts() {
 
   // apollo
   const [getMyContacts, { data: myContactsData, loading }] = useLazyQuery(GET_MY_CONTACTS);
+  const { data: newFriendShipAcceptData } = useSubscription(NEW_FRIENDSHIP_ACCEPT);
   // functions
   const handleContactChoise = async (receiverId) => {
     dispatch({ type: 'SET_CURRENT_RECEIVER', currentReceiver: receiverId });
@@ -48,22 +49,28 @@ export function MyContacts() {
   useEffect(() => {
     if (nativeContacts && nativeContacts.length > 0) {
       let extractedArr = [];
-      setUiLoading(true);
-      nativeContacts.forEach(item => {
-        if (item.friend && item.user && currentUser) {
-          if (item.friend._id === currentUser._id){
-            extractedArr.push(item.user);
-          } else {
-            extractedArr.push(item.friend);
+      const preparingContacts = async () => {
+        setUiLoading(true);
+        await nativeContacts.forEach(item => {
+          if (item.friend && item.user && currentUser) {
+            if (item.friend._id === currentUser._id){
+              extractedArr.push(item.user);
+            } else {
+              extractedArr.push(item.friend);
+            }
           }
-        }
-      });
-      setTimeout(() => {
-        setUiLoading(false);
-        dispatch({ type: 'SET_MY_CONTACTS', myContacts: extractedArr })
-      }, 1500);
+        });
+      };
+      preparingContacts();
+      setUiLoading(false);
+      dispatch({ type: 'SET_MY_CONTACTS', myContacts: extractedArr });
     }
   }, [nativeContacts]);
+  useEffect(() => {
+    if (newFriendShipAcceptData && newFriendShipAcceptData.newFriendshipAccept) {
+      setNativeContacts([...nativeContacts, newFriendShipAcceptData.newFriendshipAccept]);
+    }
+  }, [newFriendShipAcceptData]);
   return (
     <div className="bg-white pt-6 pl-4">
       <div
@@ -138,7 +145,7 @@ export function MyContacts() {
         ) : null}
       </>
       <>
-        { myContacts && myContacts.length < 1 && !loading && !uiLoading ? (
+        { nativeContacts && nativeContacts.length < 1 && !loading && !uiLoading ? (
           <div 
             className="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 
               px-4 py-3 shadow-md" 

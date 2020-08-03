@@ -3,6 +3,8 @@ const { Contact } = require('../../models/Contact');
 const { Notification } = require('../../models/Notification');
 const mongoose = require('mongoose');
 const { gql } = require('apollo-server-express');
+const { withFilter } = require('graphql-subscriptions');
+const { pubsub, NEW_FRIENDSHIP_ACCEPT, NEW_JOINED_CONTACT } = require('../pubsubEngine/pubSubRedis');
 
 // typeDefs
 exports.contactTypeDefs = gql`
@@ -41,7 +43,10 @@ exports.contactTypeDefs = gql`
   }
 
   # Subscription
-  #extend type Subscription {}
+  extend type Subscription {
+    newFriendshipAccept: Contact!
+    newJoinedContact: Notification!
+  }
 `
 
 // resolvers
@@ -108,6 +113,11 @@ const resolvers = {
             await notif.save();
             const backContact = await Contact.findOne({_id: result._id})
               .populate('friend');
+            const newJoinedContact = await Notification.findOne({ _id: notif._id })
+              .populate('sender')
+              .populate('receiver')
+              .populate('contactAbout');
+            await pubsub.publish(NEW_JOINED_CONTACT, { newJoinedContact: newJoinedContact._doc });
             return { ...backContact._doc };
           }
         } catch (err) {
@@ -122,10 +132,11 @@ const resolvers = {
             { _id: args.contactId },
             {$set: { friendShip: true }}
           );
-          await Notification.updateOne(
-            { _id: args.notifId },
-            { $set: {visited: true} }
-          );
+          const newFriendshipAccept = await Contact.findOne({ _id: args.contactId })
+            .populate('user')
+            .populate('friend');
+          await pubsub.publish(NEW_FRIENDSHIP_ACCEPT, { newFriendshipAccept: newFriendshipAccept });
+          await Notification.deleteOne({ _id: args.notifId });
           if (resultUp) {
             return { status: "OK" };
           }
@@ -136,7 +147,33 @@ const resolvers = {
     }
   },
   Subscription: {
-
+    newFriendshipAccept: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator('NEW_FRIENDSHIP_ACCEPT'),
+        (payload, variables, context, info) => {
+          if (
+            context.userId === payload.newFriendshipAccept.friend._id.toString() ||
+            context.userId === payload.newFriendshipAccept.user._id.toString()
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+      ),
+    },
+    newJoinedContact: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator('NEW_JOINED_CONTACT'),
+        (payload, variables, context, info) => {
+          if (context.userId === payload.newJoinedContact.receiver._id.toString()) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+      ),
+    }
   }
 }
 
