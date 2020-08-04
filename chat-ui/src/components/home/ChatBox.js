@@ -47,7 +47,6 @@ export function ChatBox() {
   // real staff effects
   useEffect(() => {
     if (newChatData && newChatData.newChat && currentReceiver) {
-      //console.log(newChatData.newChat);
       if (newChatData.newChat.sender && 
         newChatData.newChat.sender._id.toString() === currentReceiver.toString()
       ) {

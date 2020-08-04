@@ -98,8 +98,6 @@ const resolvers = {
       subscribe: withFilter(
         () => pubsub.asyncIterator('NEW_CHAT'),
         (payload, variables, context, info) => {
-          //console.log("Before checking user");
-          //console.log(payload.newChat);
           if (context.userId === payload.newChat.receiver._id.toString()) {
             return true;
           } else {
